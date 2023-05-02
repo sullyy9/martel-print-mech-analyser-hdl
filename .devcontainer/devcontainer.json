@@ -1,0 +1,34 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.166.1/containers/docker-existing-dockerfile
+{
+    "image": "ghcr.io/sullyy9/fpga-container:latest",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+        "teros-technology.teroshdl",
+        "charliermarsh.ruff"
+    ],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Uncomment the next line to run commands after the container is created - for example installing curl.
+	"postAttachCommand": [
+        "cp", "./.prj_config.teros", "/home/developer/.prj_config.teros"
+    ],
+
+	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+	"runArgs": [
+    ]
+
+	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
+	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+	// "mounts": [ "type=bind,source=/mnt/c/Xilinx/Vivado,target=/home/developer/vivado" ]
+
+	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+}

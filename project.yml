@@ -1,0 +1,42 @@
+toplevel: main
+name: "martel-print-mech-simulator"
+files: 
+  - name: "src/baud_rate_clock.sv"
+    file_type: systemVerilogSource
+    is_include_file: false
+    include_path: ""
+    logical_name: ""
+  - name: "src/main.sv"
+    file_type: systemVerilogSource
+    is_include_file: false
+    include_path: ""
+    logical_name: ""
+  - name: "src/print_mechanism.sv"
+    file_type: systemVerilogSource
+    is_include_file: false
+    include_path: ""
+    logical_name: ""
+  - name: "src/uart_transmit_buffer.sv"
+    file_type: systemVerilogSource
+    is_include_file: false
+    include_path: ""
+    logical_name: ""
+  - name: "src/uart_transmitter.sv"
+    file_type: systemVerilogSource
+    is_include_file: false
+    include_path: ""
+    logical_name: ""
+tool_options: 
+  verilator: 
+    installation_path: "/usr/bin"
+    mode: cc
+    libs: 
+      - ""
+    verilator_options: 
+      - ""
+    make_options: 
+      - ""
+    run_options: 
+      - ""
+    linter_options: 
+      - ""
