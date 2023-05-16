@@ -25,14 +25,6 @@ module synchroniser #(
         end
     end
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, synchroniser);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

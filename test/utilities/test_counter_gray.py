@@ -11,13 +11,14 @@ from .. import config
 
 
 def test_counter_gray():
-    output_directory: Path = Path(config.OUTPUT_DIRECTORY, "counter_gray")
+    output_directory: Path = Path(config.BUILD_DIRECTORY, "counter_gray")
 
     cocotb_test.simulator.run(
         verilog_sources=config.VERLIOG_SOURCES,
         toplevel="counter_gray",
         module="test.utilities.test_counter_gray",
         sim_build=output_directory,
+        extra_args=config.SIM_ARGS,
     )
 
 

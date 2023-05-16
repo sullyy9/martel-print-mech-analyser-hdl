@@ -34,14 +34,6 @@ module counter_gray #(
         .data_out(count)
     );
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, counter_gray);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

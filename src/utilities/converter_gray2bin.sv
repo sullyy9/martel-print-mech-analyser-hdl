@@ -18,14 +18,6 @@ module converter_gray2bin #(
         end
     endgenerate
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, converter_gray2bin);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

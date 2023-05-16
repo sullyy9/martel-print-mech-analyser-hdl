@@ -34,14 +34,6 @@ module fifo_counter #(
         .count(address)
     );
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, fifo_counter);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

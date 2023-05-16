@@ -12,14 +12,6 @@ module converter_bin2gray #(
 );
     assign data_out = {data_in[DATA_WIDTH-1], data_in[DATA_WIDTH-1:1] ^ data_in[DATA_WIDTH-2:0]};
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, converter_bin2gray);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

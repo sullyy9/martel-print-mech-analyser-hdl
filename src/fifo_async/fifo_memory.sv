@@ -31,14 +31,6 @@ module fifo_memory #(
 
     assign read_data = buffer[read_address+:8];
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, fifo_memory);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

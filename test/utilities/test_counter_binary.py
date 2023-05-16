@@ -25,7 +25,7 @@ from .. import config
 )
 def test_counter_binary(parameters: dict):
     output_directory: Path = Path(
-        config.OUTPUT_DIRECTORY,
+        config.BUILD_DIRECTORY,
         "counter_binary/max_value={MAX_VALUE}-increment={INCREMENT}".format(
             **parameters
         ),
@@ -36,6 +36,7 @@ def test_counter_binary(parameters: dict):
         toplevel="counter_binary",
         module="test.utilities.test_counter_binary",
         sim_build=output_directory,
+        extra_args=config.SIM_ARGS,
         parameters=parameters,
     )
 

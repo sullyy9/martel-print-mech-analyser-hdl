@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "rm",
             "args": [
-                "-r", "${workspaceFolder}/sim_build"
+                "-rf", "${workspaceFolder}/sim_build/*"
             ]
         },
         {
@@ -16,9 +16,16 @@
             "type": "shell",
             "command": "pytest",
             "args": [
-                "${workspaceFolder}/src/run_tests.py"
+                "-o", "log_cli=true",
+                "--log-file=${workspaceFolder}/sim_build/results.log",
+                "--cocotbxml=${workspaceFolder}/sim_build/results.xml",
+                "${workspaceFolder}/test"
             ],
-            "dependsOn": "Clean Test Results"
+            "options": {
+                "env": {
+                    "SIM": "verilator"
+                }
+            },
         }
     ]
 }

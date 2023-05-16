@@ -148,14 +148,6 @@ module fifo_async #(
         .read_data
     );
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, fifo_async);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

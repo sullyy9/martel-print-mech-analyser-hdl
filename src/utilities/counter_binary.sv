@@ -35,14 +35,6 @@ module counter_binary #(
 
     assign count = count_reg;
 
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, counter_binary);
-        #1;
-    end
-`endif
-
 endmodule
 
 `endif

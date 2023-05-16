@@ -10,8 +10,8 @@ module incrementer #(
     input  logic [$clog2(MAX_VALUE+1)-1:0] data_in,
     output logic [$clog2(MAX_VALUE+1)-1:0] data_out
 );
-    localparam logic [$clog2(INCREMENT+1)-1:0] Increment = INCREMENT;
-    localparam logic [$clog2(MAX_VALUE+1)-1:0] MaxValue = MAX_VALUE;
+    localparam logic [$clog2(MAX_VALUE+1)-1:0] Increment = INCREMENT[$clog2(MAX_VALUE+1)-1:0];
+    localparam logic [$clog2(MAX_VALUE+1)-1:0] MaxValue = MAX_VALUE[$clog2(MAX_VALUE+1)-1:0];
 
     always_comb begin
         data_out = data_in + Increment;
@@ -20,14 +20,6 @@ module incrementer #(
             data_out = '0;
         end
     end
-
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, incrementer);
-        #1;
-    end
-`endif
 
 endmodule
 

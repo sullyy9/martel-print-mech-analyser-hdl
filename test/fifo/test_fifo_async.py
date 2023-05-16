@@ -2,7 +2,6 @@ from typing import Final
 from pathlib import Path
 
 import cocotb
-from cocotb.triggers import RisingEdge, ClockCycles
 
 import cocotb_test.simulator
 
@@ -19,13 +18,14 @@ from ..signal_monitor import ExclusiveSignalMonitor
 
 
 def test_fifo_async():
-    output_directory: Path = Path(config.OUTPUT_DIRECTORY, "fifo_async")
+    output_directory: Path = Path(config.BUILD_DIRECTORY, "fifo_async")
 
     cocotb_test.simulator.run(
         verilog_sources=config.VERLIOG_SOURCES,
         toplevel="fifo_async",
         module="test.fifo.test_fifo_async",
         sim_build=output_directory,
+        extra_args=config.SIM_ARGS,
     )
 
 
