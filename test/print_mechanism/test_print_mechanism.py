@@ -6,7 +6,6 @@ from pathlib import Path
 from decimal import Decimal
 
 import cocotb
-from cocotb.binary import BinaryValue
 from cocotb.triggers import Timer
 
 import cocotb_test.simulator
@@ -41,6 +40,7 @@ def test_print_mechanism():
 
 ##################################################
 
+
 @cocotb.test()  # type: ignore
 async def run_test(dut):
     clock_driver: Final[ClockDriver] = ClockDriver(dut.clk)
@@ -57,7 +57,7 @@ async def run_test(dut):
     print_monitor: Final = PrintMechMonitor(
         name="PrintMechMonitor",
         print_line_ready=dut.print_line_ready,
-        print_line=dut.print_line
+        print_line=dut.print_line,
     )
 
     clock_driver.start(100_000_000)
@@ -103,7 +103,6 @@ async def run_test(dut):
     lines: list[NDArray[uint8]] = []
     try:
         while True:
-
             line = print_monitor.lines.get_nowait()
             lines.append(np.array([uint8(b) for b in line]))
     except asyncio.QueueEmpty:
@@ -111,4 +110,3 @@ async def run_test(dut):
 
     img = np.multiply(np.vstack(lines), 255, dtype=uint8)
     cv.imwrite("test.png", img)
-
