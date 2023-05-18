@@ -25,11 +25,11 @@ module fifo_memory #(
             buffer <= '0;
 
         end else if (write_enable) begin
-            buffer[write_address+:8] <= write_data;
+            buffer[write_address+:DATA_WIDTH] <= write_data;
         end
     end
 
-    assign read_data = buffer[read_address+:8];
+    assign read_data = buffer[read_address+:DATA_WIDTH];
 
 endmodule
 

@@ -36,3 +36,4 @@ class ClockDriver:
 
         if self._coroutine is not None:
             self._coroutine.kill()
+            self._coroutine = None
