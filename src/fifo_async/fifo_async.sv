@@ -20,13 +20,14 @@ module fifo_async #(
     output logic full,
     output logic empty
 );
+
+    logic [$clog2(DATA_WIDTH*DEPTH)-1:0] write_address, read_address;
+    logic [$clog2(DEPTH)-1:0] write_ptr_async, read_ptr_async;
+    logic [$clog2(DEPTH)-1:0] write_ptr_sync, read_ptr_sync;
+
     //////////////////////////////////////////////////
     // Counters.
     //////////
-    logic [$clog2(DATA_WIDTH*DEPTH)-1:0] write_address, read_address;
-    logic [$clog2(DEPTH)-1:0] write_ptr_async_gray, read_ptr_async_gray;
-    logic [$clog2(DEPTH)-1:0] write_ptr_async_bin, read_ptr_async_bin;
-
     fifo_counter #(
         .DATA_WIDTH(DATA_WIDTH),
         .DEPTH(DEPTH)
@@ -37,16 +38,8 @@ module fifo_async #(
         .enable(write_enable & !full),
 
         .address(write_address),
-        .ptr(write_ptr_async_gray)
+        .pointer(write_ptr_async)
     );
-
-    converter_gray2bin #(
-        .DATA_WIDTH($clog2(DEPTH))
-    ) write_ptr_async_converter (
-        .data_in (write_ptr_async_gray),
-        .data_out(write_ptr_async_bin)
-    );
-
 
     fifo_counter #(
         .DATA_WIDTH(DATA_WIDTH),
@@ -58,75 +51,49 @@ module fifo_async #(
         .enable(read_enable & !empty),
 
         .address(read_address),
-        .ptr(read_ptr_async_gray)
-    );
-
-    converter_gray2bin #(
-        .DATA_WIDTH($clog2(DEPTH))
-    ) read_ptr_async_converter (
-        .data_in (read_ptr_async_gray),
-        .data_out(read_ptr_async_bin)
+        .pointer(read_ptr_async)
     );
 
     //////////////////////////////////////////////////
     // Synchronisers.
     //////////
-    logic [$clog2(DEPTH)-1:0] write_ptr_sync_gray, read_ptr_sync_gray;
-    logic [$clog2(DEPTH)-1:0] write_ptr_sync_bin, read_ptr_sync_bin;
+    fifo_pointer_synchroniser #(
+        .POINTER_WIDTH($clog2(DEPTH))
 
-    synchroniser #(
-        .WIDTH($clog2(DEPTH))
-
-    ) write_ptr_synchroniser (
+    ) write_pointer_synchroniser (
         .clk(read_clk),
         .reset,
-
-        .d_in (write_ptr_async_gray),
-        .d_out(write_ptr_sync_gray)
+        .pointer_async(write_ptr_async),
+        .pointer_sync(write_ptr_sync)
     );
 
-    converter_gray2bin #(
-        .DATA_WIDTH($clog2(DEPTH))
-    ) write_ptr_sync_converter (
-        .data_in (write_ptr_sync_gray),
-        .data_out(write_ptr_sync_bin)
-    );
+    fifo_pointer_synchroniser #(
+        .POINTER_WIDTH($clog2(DEPTH))
 
-    synchroniser #(
-        .WIDTH($clog2(DEPTH))
-
-    ) read_ptr_synchroniser (
+    ) read_pointer_synchroniser (
         .clk(write_clk),
         .reset,
-
-        .d_in (read_ptr_async_gray),
-        .d_out(read_ptr_sync_gray)
-    );
-
-    converter_gray2bin #(
-        .DATA_WIDTH($clog2(DEPTH))
-    ) read_ptr_sync_converter (
-        .data_in (read_ptr_sync_gray),
-        .data_out(read_ptr_sync_bin)
+        .pointer_async(read_ptr_async),
+        .pointer_sync(read_ptr_sync)
     );
 
     //////////////////////////////////////////////////
     // Empty / full logic.
     //////////
-    logic [$clog2(DEPTH)-1:0] write_ptr_async_bin_next;
+    logic [$clog2(DEPTH)-1:0] write_ptr_async_next;
 
     incrementer #(
         .MAX_VALUE(DEPTH - 1),
         .INCREMENT(1)
 
     ) write_ptr_async_bin_incrementer (
-        .data_in (write_ptr_async_bin),
-        .data_out(write_ptr_async_bin_next)
+        .data_in (write_ptr_async),
+        .data_out(write_ptr_async_next)
     );
 
 
-    assign empty = (write_ptr_sync_gray == read_ptr_async_gray);
-    assign full  = (write_ptr_async_bin_next == read_ptr_sync_bin);
+    assign empty = (write_ptr_sync == read_ptr_async);
+    assign full  = (write_ptr_async_next == read_ptr_sync);
 
     //////////////////////////////////////////////////
     // Buffer read / write.

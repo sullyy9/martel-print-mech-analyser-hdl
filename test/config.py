@@ -5,6 +5,7 @@ VERLIOG_SOURCES: Final[list[Path]] = [
     Path("src/fifo_async/fifo_async.sv"),
     Path("src/fifo_async/fifo_counter.sv"),
     Path("src/fifo_async/fifo_memory.sv"),
+    Path("src/fifo_async/fifo_pointer_synchroniser.sv"),
     Path("src/fifo_buffer/fifo_buffer.sv"),
     # Path("src/main/main.sv"),
     Path("src/print_mechanism/stepper_motor.sv"),
@@ -30,7 +31,9 @@ SIM_ARGS: Final[list[str]] = [
     "--trace-fst",
     "--trace-structs",
     "-O3",
-    "--x-assign", "fast",
-    "--x-initial", "fast",
-    "--noassert"
+    "--x-assign",
+    "fast",
+    "--x-initial",
+    "fast",
+    "--noassert",
 ]

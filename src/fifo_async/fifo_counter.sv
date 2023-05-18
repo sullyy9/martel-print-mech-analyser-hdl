@@ -12,16 +12,16 @@ module fifo_counter #(
     input logic enable,
 
     output logic [$clog2(DATA_WIDTH*DEPTH)-1:0] address,
-    output logic [$clog2(DEPTH)-1:0] ptr
+    output logic [$clog2(DEPTH)-1:0] pointer
 );
-    counter_gray #(
+    counter_binary #(
         .MAX_VALUE(DEPTH - 1),
         .INCREMENT(1)
     ) pointer_counter (
         .clk,
         .reset,
         .enable,
-        .count(ptr)
+        .count(pointer)
     );
 
     counter_binary #(
