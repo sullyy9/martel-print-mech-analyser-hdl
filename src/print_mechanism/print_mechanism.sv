@@ -13,8 +13,11 @@ module print_mechanism #(
     input logic mech_data,
     input logic mech_latch,
     input logic mech_dst,
+
     input logic motor_phase_a,
     input logic motor_phase_b,
+    input logic motor_phase_na,
+    input logic motor_phase_nb,
 
     output logic print_line_ready,
     output logic [HEAD_WIDTH-1:0] print_line
@@ -28,7 +31,7 @@ module print_mechanism #(
 
     logic head_active;
     logic [HEAD_WIDTH-1:0] head_active_dots;
-    logic line_advance_tick;
+    logic line_advance_tick, line_reverse_tick;
 
     thermal_head #(
         .HEAD_WIDTH(HEAD_WIDTH)
@@ -49,7 +52,10 @@ module print_mechanism #(
         .reset,
         .motor_phase_a,
         .motor_phase_b,
-        .line_advance_tick
+        .motor_phase_na,
+        .motor_phase_nb,
+        .line_advance_tick,
+        .line_reverse_tick
     );
 
     always_ff @(posedge clk or negedge reset) begin

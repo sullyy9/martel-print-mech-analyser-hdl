@@ -1,11 +1,11 @@
+`ifndef MAIN_SV
+`define MAIN_SV 
+
+
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 ///
 //////////////////////////////////////////////////////////////////////////////////
-
-`include "../uart_transmitter/uart_transmitter.sv"
-`include "../print_mechanism/print_mechanism.sv"
-`include "../fifo_buffer/fifo_buffer.sv"
 
 module main (
     input logic clk,
@@ -18,15 +18,19 @@ module main (
     input logic mech_data,
     input logic mech_latch,
     input logic mech_dst,
-    input logic mech_motor_phase_a,
-    input logic mech_motor_phase_b,
+    input logic motor_phase_a,
+    input logic motor_phase_b,
+    input logic motor_phase_na,
+    input logic motor_phase_nb,
 
     output logic mech_clk_out,
     output logic mech_data_out,
     output logic mech_latch_out,
     output logic mech_dst_out,
-    output logic mech_motor_phase_a_out,
-    output logic mech_motor_phase_b_out,
+    output logic motor_phase_a_out,
+    output logic motor_phase_b_out,
+    output logic motor_phase_na_out,
+    output logic motor_phase_nb_out,
 
     output logic uart_tx_pin_1,
     output logic uart_tx_pin_2
@@ -101,8 +105,10 @@ module main (
         .mech_data,
         .mech_latch,
         .mech_dst,
-        .mech_motor_phase_a,
-        .mech_motor_phase_b,
+        .motor_phase_a,
+        .motor_phase_b,
+        .motor_phase_na,
+        .motor_phase_nb,
 
         .line_advance_tick(mech_line_ready),
         .print_line(mech_print_line)
@@ -214,20 +220,16 @@ module main (
     assign mech_data_out = mech_data;
     assign mech_latch_out = mech_latch;
     assign mech_dst_out = mech_dst;
-    assign mech_motor_phase_a_out = mech_motor_phase_a;
-    assign mech_motor_phase_b_out = mech_motor_phase_b;
+    assign motor_phase_a_out = motor_phase_a;
+    assign motor_phase_b_out = motor_phase_b;
+    assign motor_phase_na_out = motor_phase_na;
+    assign motor_phase_nb_out = motor_phase_nb;
 
     assign uart_tx_pin_2 = uart_tx_pin_1;
 
-    assign led1 = '1;
-    assign led2 = '1;
-
-`ifdef COCOTB_SIM
-    initial begin
-        $dumpfile("waveforms.vcd");
-        $dumpvars(0, main);
-        #1;
-    end
-`endif
+    assign led1 = 1'b1;
+    assign led2 = 1'b1;
 
 endmodule
+
+`endif

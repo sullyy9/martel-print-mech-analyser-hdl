@@ -4,6 +4,14 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Save Project",
+            "type": "shell",
+            "command": "cp",
+            "args": [
+                "~/.prj_config.teros", "${workspaceFolder}/",
+            ],
+        },
+        {
             "label": "Clean Test Results",
             "type": "shell",
             "command": "rm",
