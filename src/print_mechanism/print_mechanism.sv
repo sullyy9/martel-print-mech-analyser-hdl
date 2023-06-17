@@ -36,12 +36,12 @@ module print_mechanism #(
     thermal_head #(
         .HEAD_WIDTH(HEAD_WIDTH)
     ) thermal_head (
-        .clk,
+        .clk(mech_clk),
         .reset,
-        .mech_clk,
-        .mech_data,
-        .mech_latch,
-        .mech_dst,
+
+        .data (mech_data),
+        .latch(mech_latch),
+        .dst  (mech_dst),
 
         .head_active,
         .head_active_dots
@@ -50,12 +50,17 @@ module print_mechanism #(
     stepper_motor stepper_motor (
         .clk,
         .reset,
+
         .motor_phase_a,
         .motor_phase_b,
         .motor_phase_na,
         .motor_phase_nb,
+
         .line_advance_tick,
-        .line_reverse_tick
+        .line_reverse_tick,
+
+        .invalid_step,
+        .invalid_state
     );
 
     always_ff @(posedge clk or negedge reset) begin

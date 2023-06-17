@@ -7,8 +7,6 @@ from cocotb.binary import BinaryValue
 import cocotb_test.simulator
 
 from .. import config
-from ..clock_driver import ClockDriver
-from ..reset_driver import ResetDriver
 
 from .thermal_head_driver import ThermalHeadDriver
 from .thermal_head_monitor import ThermalHeadMonitor
@@ -53,15 +51,12 @@ TEST_DATA: Final[list[str]] = [
 
 @cocotb.test()  # type: ignore
 async def run_test(dut):
-    clock_driver: Final[ClockDriver] = ClockDriver(dut.clk, "Clock")
-    reset_driver: Final[ResetDriver] = ResetDriver(dut.clk, dut.reset)
-
     head_driver: Final = ThermalHeadDriver(
         name="HeadDriver",
-        clock=dut.mech_clk,
-        data=dut.mech_data,
-        latch=dut.mech_latch,
-        dst=dut.mech_dst,
+        clock=dut.clk,
+        data=dut.data,
+        latch=dut.latch,
+        dst=dut.dst,
     )
 
     head_monitor: Final = ThermalHeadMonitor(
@@ -70,12 +65,13 @@ async def run_test(dut):
         head_active_dots=dut.head_active_dots,
     )
 
-    clock_driver.start(180_000_000)
-    await reset_driver.reset(2)
-
+    dut.reset.value = 1
     head_monitor.start()
 
     for line in TEST_DATA:
         await head_driver.write_bit_stream(BinaryValue(line))
         await head_driver.latch_data()
         await head_driver.burn(0.000001)
+
+    for line in TEST_DATA:
+        assert head_monitor.burns.get_nowait() == line

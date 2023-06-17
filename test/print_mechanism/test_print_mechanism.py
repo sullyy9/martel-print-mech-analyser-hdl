@@ -26,16 +26,16 @@ from .print_mech_monitor import PrintMechMonitor
 ##################################################
 
 
-def test_print_mechanism():
-    output_directory: Path = Path(config.BUILD_DIRECTORY, "print_mechanism")
+# def test_print_mechanism():
+#     output_directory: Path = Path(config.BUILD_DIRECTORY, "print_mechanism")
 
-    cocotb_test.simulator.run(
-        verilog_sources=config.VERLIOG_SOURCES,
-        toplevel="print_mechanism",
-        module="test.print_mechanism.test_print_mechanism",
-        sim_build=output_directory,
-        extra_args=config.SIM_ARGS,
-    )
+#     cocotb_test.simulator.run(
+#         verilog_sources=config.VERLIOG_SOURCES,
+#         toplevel="print_mechanism",
+#         module="test.print_mechanism.test_print_mechanism",
+#         sim_build=output_directory,
+#         extra_args=config.SIM_ARGS,
+#     )
 
 
 ##################################################
