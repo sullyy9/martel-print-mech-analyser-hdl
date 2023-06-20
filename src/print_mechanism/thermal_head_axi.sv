@@ -16,11 +16,13 @@ module thermal_head_axi #(
 
     input logic axi_ready,
     output logic axi_valid,
-    output logic [511:0] axi_data
+    output logic [HEAD_WIDTH-1:0] axi_data
 );
 
     logic head_active, head_active_sync;
     logic [HEAD_WIDTH-1:0] head_active_dots;
+
+    logic head_data_sent_reg, head_data_sent_next;
 
     thermal_head #(
         .HEAD_WIDTH(HEAD_WIDTH)
@@ -52,16 +54,19 @@ module thermal_head_axi #(
         if (!reset) begin
             axi_valid_reg <= '0;
             axi_data_reg  <= '0;
+            head_data_sent_reg <= '0;
 
         end else begin
             axi_valid_reg <= axi_valid_next;
             axi_data_reg  <= axi_data_next;
+            head_data_sent_reg <= head_data_sent_next;
         end
     end
 
     always_comb begin
         axi_valid_next = axi_valid_reg;
         axi_data_next  = axi_data_reg;
+        head_data_sent_next = head_data_sent_reg;
 
         // De-assert valid after transfer complete.
         if (axi_valid && axi_ready) begin
@@ -70,9 +75,14 @@ module thermal_head_axi #(
         end
 
         // Buffer next data if we're not waiting to transfer.
-        if (head_active_sync && !axi_valid) begin
+        if (head_active_sync && !axi_valid && !head_data_sent_reg) begin
             axi_valid_next = 1'b1;
             axi_data_next  = head_active_dots;
+            head_data_sent_next = 1'b1;
+        end
+
+        if (!head_active_sync) begin
+            head_data_sent_next = '0;
         end
     end
 
