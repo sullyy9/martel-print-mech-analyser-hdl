@@ -2,7 +2,7 @@ import logging
 from logging import Logger
 from typing import Final, Optional
 
-from cocotb.decorators import Task
+from cocotb.task import Task
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import RisingEdge, ClockCycles
 

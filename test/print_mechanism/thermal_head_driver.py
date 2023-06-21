@@ -5,7 +5,7 @@ from decimal import Decimal
 
 import cocotb
 from cocotb.triggers import Timer, FallingEdge, RisingEdge
-from cocotb.decorators import Task
+from cocotb.task import Task
 from cocotb.handle import SimHandleBase
 from cocotb.clock import Clock
 from cocotb.binary import BinaryValue

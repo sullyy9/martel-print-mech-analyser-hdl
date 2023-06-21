@@ -4,8 +4,6 @@ from pathlib import Path
 import cocotb
 from cocotb.triggers import ClockCycles
 
-import cocotb_test.simulator
-
 from .. import config
 from ..clock_driver import ClockDriver
 from ..reset_driver import ResetDriver
@@ -16,15 +14,11 @@ from .stepper_motor_monitor import StepperMotorMonitor
 ##################################################
 
 
-def test_print_mechanism():
-    output_directory: Path = Path(config.BUILD_DIRECTORY, "stepper_motor")
-
-    cocotb_test.simulator.run(
-        verilog_sources=config.VERLIOG_SOURCES,
+def test_stepper_motor():
+    config.run_test(
         toplevel="stepper_motor",
-        module="test.print_mechanism.test_stepper_motor",
-        sim_build=output_directory,
-        extra_args=config.SIM_ARGS,
+        output_directory=Path(config.OUTPUT_DIRECTORY, "stepper_motor"),
+        test_module="test.print_mechanism.test_stepper_motor",
     )
 
 

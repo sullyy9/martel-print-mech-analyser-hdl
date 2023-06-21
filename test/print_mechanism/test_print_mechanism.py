@@ -8,8 +8,6 @@ from decimal import Decimal
 import cocotb
 from cocotb.triggers import Timer
 
-import cocotb_test.simulator
-
 import numpy as np
 from numpy import uint8, float32
 from numpy.typing import NDArray
@@ -27,14 +25,10 @@ from .print_mech_monitor import PrintMechMonitor
 
 
 # def test_print_mechanism():
-#     output_directory: Path = Path(config.BUILD_DIRECTORY, "print_mechanism")
-
-#     cocotb_test.simulator.run(
-#         verilog_sources=config.VERLIOG_SOURCES,
+#     config.run_test(
 #         toplevel="print_mechanism",
-#         module="test.print_mechanism.test_print_mechanism",
-#         sim_build=output_directory,
-#         extra_args=config.SIM_ARGS,
+#         output_directory=Path(config.OUTPUT_DIRECTORY, "print_mechanism"),
+#         test_module="test.print_mechanism.test_print_mechanism",
 #     )
 
 

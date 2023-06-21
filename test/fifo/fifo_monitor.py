@@ -6,7 +6,7 @@ import cocotb
 from cocotb.queue import Queue
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import RisingEdge, ReadOnly
-from cocotb.decorators import Task
+from cocotb.task import Task
 
 
 class FifoDataMonitor:

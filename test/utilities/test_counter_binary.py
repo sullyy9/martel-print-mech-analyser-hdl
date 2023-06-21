@@ -7,8 +7,6 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, ReadOnly, ClockCycles
 
-import cocotb_test.simulator
-
 from .. import config
 
 ##################################################
@@ -25,21 +23,18 @@ from .. import config
 )
 def test_counter_binary(parameters: dict):
     output_directory: Path = Path(
-        config.BUILD_DIRECTORY,
+        config.OUTPUT_DIRECTORY,
         "counter_binary/max_value={MAX_VALUE}-increment={INCREMENT}".format(
             **parameters
         ),
     )
 
-    cocotb_test.simulator.run(
-        verilog_sources=config.VERLIOG_SOURCES,
+    config.run_test(
         toplevel="counter_binary",
-        module="test.utilities.test_counter_binary",
-        sim_build=output_directory,
-        extra_args=config.SIM_ARGS,
+        output_directory=output_directory,
+        test_module="test.utilities.test_counter_binary",
         parameters=parameters,
     )
-
 
 ##################################################
 

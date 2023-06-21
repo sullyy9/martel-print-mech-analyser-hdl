@@ -4,8 +4,6 @@ from pathlib import Path
 import cocotb
 from cocotb.binary import BinaryValue
 
-import cocotb_test.simulator
-
 from .. import config
 
 from .thermal_head_driver import ThermalHeadDriver
@@ -15,14 +13,10 @@ from .thermal_head_monitor import ThermalHeadMonitor
 
 
 def test_thermal_head():
-    output_directory: Path = Path(config.BUILD_DIRECTORY, "thermal_head")
-
-    cocotb_test.simulator.run(
-        verilog_sources=config.VERLIOG_SOURCES,
+    config.run_test(
         toplevel="thermal_head",
-        module="test.print_mechanism.test_thermal_head",
-        sim_build=output_directory,
-        extra_args=config.SIM_ARGS,
+        output_directory=Path(config.OUTPUT_DIRECTORY, "thermal_head"),
+        test_module="test.print_mechanism.test_thermal_head",
         parameters={"HEAD_WIDTH": 16},
     )
 

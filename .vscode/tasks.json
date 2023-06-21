@@ -27,7 +27,8 @@
                 "-o", "log_cli=true",
                 "--log-file=${workspaceFolder}/sim_build/results.log",
                 "--cocotbxml=${workspaceFolder}/sim_build/results.xml",
-                "${workspaceFolder}/test"
+                "${workspaceFolder}/test",
+                "-s"
             ],
             "options": {
                 "env": {

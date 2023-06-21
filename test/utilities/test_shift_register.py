@@ -1,26 +1,18 @@
-from typing import Final
 from pathlib import Path
 
 import cocotb
-from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, ReadWrite, ReadOnly, ClockCycles
-
-import cocotb_test.simulator
 
 from .. import config
 from ..clock_driver import ClockDriver
 from ..reset_driver import ResetDriver
 
 
-def test_counter_gray():
-    output_directory: Path = Path(config.BUILD_DIRECTORY, "shift_register")
-
-    cocotb_test.simulator.run(
-        verilog_sources=config.VERLIOG_SOURCES,
+def test_counter_gray() -> None:
+    config.run_test(
         toplevel="shift_register",
-        module="test.utilities.test_shift_register",
-        sim_build=output_directory,
-        extra_args=config.SIM_ARGS,
+        output_directory=Path(config.OUTPUT_DIRECTORY, "shift_register"),
+        test_module="test.utilities.test_shift_register",
     )
 
 
