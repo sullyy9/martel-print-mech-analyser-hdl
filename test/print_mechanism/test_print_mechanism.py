@@ -14,8 +14,7 @@ from numpy.typing import NDArray
 import cv2 as cv
 
 from .. import config
-from ..clock_driver import ClockDriver
-from ..reset_driver import ResetDriver
+from ..clock_domain import ClockDomainDriver
 
 from .thermal_head_driver import ThermalHeadDriver
 from .print_mech_monitor import PrintMechMonitor
@@ -36,8 +35,7 @@ from .print_mech_monitor import PrintMechMonitor
 
 @cocotb.test()  # type: ignore
 async def run_test(dut):
-    clock_driver: Final[ClockDriver] = ClockDriver(dut.clk)
-    reset_driver: Final[ResetDriver] = ResetDriver(dut.clk, dut.reset)
+    clock_domain: Final = ClockDomainDriver(dut.clk, dut.reset)
 
     head_driver: Final = ThermalHeadDriver(
         name="HeadDriver",
@@ -53,8 +51,8 @@ async def run_test(dut):
         print_line=dut.print_line,
     )
 
-    clock_driver.start(100_000_000)
-    await reset_driver.reset(2)
+    clock_domain.start(100_000_000)
+    await clock_domain.reset(2)
 
     print_monitor.start()
 

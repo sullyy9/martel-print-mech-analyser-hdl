@@ -4,8 +4,7 @@ import cocotb
 from cocotb.triggers import RisingEdge, FallingEdge, ReadWrite, ReadOnly, ClockCycles
 
 from .. import config
-from ..clock_driver import ClockDriver
-from ..reset_driver import ResetDriver
+from ..clock_domain import ClockDomainDriver
 
 
 def test_counter_gray() -> None:
@@ -21,13 +20,12 @@ def test_counter_gray() -> None:
 
 @cocotb.test()  # type: ignore
 async def run_test(dut):
-    clock_driver = ClockDriver(dut.clk)
-    reset_driver = ResetDriver(dut.clk, dut.reset)
+    clock_domain = ClockDomainDriver(dut.clk, dut.reset)
 
     dut.data_in.value = 0
     dut.enable.value = 0
-    clock_driver.start(frequency=100_000_000)
-    await reset_driver.reset(2)
+    clock_domain.start(frequency=100_000_000)
+    await clock_domain.reset(2)
 
     for _ in range(4):
         await FallingEdge(dut.clk)

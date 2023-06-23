@@ -5,8 +5,7 @@ import cocotb
 from cocotb.triggers import ClockCycles
 
 from .. import config
-from ..clock_driver import ClockDriver
-from ..reset_driver import ResetDriver
+from ..clock_domain import ClockDomainDriver
 
 from .stepper_motor_driver import StepperMotorDriver
 from .stepper_motor_monitor import StepperMotorMonitor
@@ -27,8 +26,7 @@ def test_stepper_motor():
 
 @cocotb.test()  # type: ignore
 async def run_test(dut):
-    clock_driver: Final[ClockDriver] = ClockDriver(dut.clk)
-    reset_driver: Final[ResetDriver] = ResetDriver(dut.clk, dut.reset)
+    clock_domain: Final = ClockDomainDriver(dut.clk, dut.reset)
 
     motor_driver: Final = StepperMotorDriver(
         name="MotorDriver",
@@ -45,8 +43,8 @@ async def run_test(dut):
         line_reverse_tick=dut.line_reverse_tick,
     )
 
-    clock_driver.start(100_000_000)
-    await reset_driver.reset(2)
+    clock_domain.start(100_000_000)
+    await clock_domain.reset(2)
     await motor_driver.step_forward(1)
 
     monitor.start()

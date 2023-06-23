@@ -8,8 +8,7 @@ from .fifo_monitor import FifoDataMonitor
 from .fifo_model import FifoModel
 
 from .. import config
-from ..clock_driver import ClockDriver
-from ..reset_driver import ResetDriver
+from ..clock_domain import ClockDomainDriver
 from ..signal_monitor import ExclusiveSignalMonitor
 
 ##################################################
@@ -28,10 +27,12 @@ def test_fifo_async():
 
 @cocotb.test()  # type: ignore
 async def run_test(dut):
-    read_clock_driver: Final[ClockDriver] = ClockDriver(dut.read_clk, "ReadClock")
-    write_clock_driver: Final[ClockDriver] = ClockDriver(dut.write_clk, "WriteClock")
-
-    reset_driver: Final[ResetDriver] = ResetDriver(dut.write_clk, dut.reset)
+    read_clock_domain: Final = ClockDomainDriver(
+        dut.read_clk, dut.reset, name="ReadClockDomain"
+    )
+    write_clock_domain: Final = ClockDomainDriver(
+        dut.write_clk, dut.reset, name="WriteClockDomain"
+    )
 
     read_driver: Final[FifoReadDriver] = FifoReadDriver(
         name="ReadDriver", clock=dut.read_clk, enable=dut.read_enable, empty=dut.empty
@@ -74,10 +75,10 @@ async def run_test(dut):
 
     model: Final[FifoModel] = FifoModel(dut.DEPTH.value)
 
-    read_clock_driver.start(frequency=1_000_000)
-    write_clock_driver.start(frequency=2_000_000)
-
-    await reset_driver.reset(2)
+    read_clock_domain.start(frequency=1_000_000)
+    write_clock_domain.start(frequency=2_000_000)
+    await read_clock_domain.reset(2)
+    await write_clock_domain.reset(2)
 
     read_monitor.start()
     write_monitor.start()
@@ -129,5 +130,5 @@ async def run_test(dut):
     read_monitor.stop()
     write_monitor.stop()
 
-    read_clock_driver.stop()
-    write_clock_driver.stop()
+    read_clock_domain.stop()
+    write_clock_domain.stop()
