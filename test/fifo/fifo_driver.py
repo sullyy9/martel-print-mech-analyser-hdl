@@ -1,8 +1,7 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
-
+import cocotb
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import RisingEdge
 
@@ -27,13 +26,13 @@ class FifoReadDriver:
         self._enable: Final[SimHandleBase] = enable
         self._empty: Final[SimHandleBase] = empty
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
         self._enable.value = 0
 
     async def read(self) -> None:
         if self._log is not None:
-            self._log.warning("Read word")
+            self._log.info("Read word")
 
         await RisingEdge(self._clock)
 
@@ -60,14 +59,14 @@ class FifoWriteDriver:
         self._data: Final[SimHandleBase] = data
         self._full: Final[SimHandleBase] = full
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
         self._enable.value = 0
         self._data.value = 0
 
     async def write(self, word: int) -> None:
         if self._log is not None:
-            self._log.warning(f"Write word: {word}")
+            self._log.info(f"Write word: {word}")
 
         await RisingEdge(self._clock)
 

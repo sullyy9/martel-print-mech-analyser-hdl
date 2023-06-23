@@ -1,7 +1,7 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
+import cocotb
 from cocotb.triggers import FallingEdge, ReadWrite
 from cocotb.handle import SimHandleBase
 
@@ -35,7 +35,7 @@ class StepperMotorDriver:
 
         self._step: int = 0
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
         self._clock.value = 1
         self._phase_a.value = 0

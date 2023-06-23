@@ -1,4 +1,3 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
@@ -22,18 +21,18 @@ class ExclusiveSignalMonitor:
 
         self._coroutine: Optional[Task] = None
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
     def start(self) -> None:
         if self._log is not None:
-            self._log.warning("Start")
+            self._log.info("Start")
 
         if self._coroutine is None:
             self._coroutine = cocotb.start_soon(self._monitor())
 
     def stop(self) -> None:
         if self._log is not None:
-            self._log.warning("Stop")
+            self._log.info("Stop")
 
         if self._coroutine is not None:
             self._coroutine.kill()

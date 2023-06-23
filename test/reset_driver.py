@@ -1,7 +1,7 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
+import cocotb
 from cocotb.task import Task
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import RisingEdge, ClockCycles
@@ -19,7 +19,7 @@ class ResetDriver:
 
         self._coroutine: Optional[Task] = None
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
     async def reset(self, clock_cycles: int) -> None:
         if self._log is not None:

@@ -1,4 +1,3 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
@@ -23,18 +22,18 @@ class PrintMechMonitor:
 
         self.lines: Queue = Queue()
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
     def start(self) -> None:
         if self._log is not None:
-            self._log.warning("Start")
+            self._log.info("Start")
 
         if self._coroutine is None:
             self._coroutine = cocotb.start_soon(self._monitor())
 
     def stop(self) -> None:
         if self._log is not None:
-            self._log.warning("Stop")
+            self._log.info("Stop")
 
         if self._coroutine is not None:
             self._coroutine.kill()
@@ -46,4 +45,4 @@ class PrintMechMonitor:
             self.lines.put_nowait(self._print_line.value.binstr)
 
             if self._log is not None:
-                self._log.warning("Got line")
+                self._log.info("Got line")

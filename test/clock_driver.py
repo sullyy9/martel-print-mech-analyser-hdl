@@ -1,4 +1,3 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
@@ -18,7 +17,7 @@ class ClockDriver:
 
         self._coroutine: Optional[Task] = None
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
     def start(self, frequency: float = 1_000_000) -> None:
         if self._coroutine is None:
@@ -28,11 +27,11 @@ class ClockDriver:
             self._coroutine = cocotb.start_soon(clock.start())
 
             if self._log is not None:
-                self._log.warning(f"Start with frequency: {frequency}Hz")
+                self._log.info(f"Start with frequency: {frequency}Hz")
 
     def stop(self) -> None:
         if self._log is not None:
-            self._log.warning("Stop")
+            self._log.info("Stop")
 
         if self._coroutine is not None:
             self._coroutine.kill()

@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import os
 from typing import Final, Optional
 from pathlib import Path
@@ -59,7 +58,7 @@ async def run_test(dut):
 
     print_monitor.start()
 
-    log = logging.getLogger("Test")
+    log = cocotb.log.getChild("Test")
 
     with open(Path(os.path.dirname(__file__), "./Arial16.csv")) as file:
         csv_data = np.genfromtxt(
@@ -74,7 +73,7 @@ async def run_test(dut):
         i = 0
         for timestamp, clock, data, latch, dst, motora, motorb in csv_data:
             if (i % 1000) == 0:
-                log.warning(f"{i}/{len(csv_data)}")
+                log.info(f"{i}/{len(csv_data)}")
 
             i += 1
 

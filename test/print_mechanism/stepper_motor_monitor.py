@@ -1,4 +1,3 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 
@@ -22,18 +21,18 @@ class StepperMotorMonitor:
 
         self._lines_moved: int = 0
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
     def start(self) -> None:
         if self._log is not None:
-            self._log.warning("Start")
+            self._log.info("Start")
 
         if self._coro is None:
             self._coro = cocotb.start_soon(self._monitor())
 
     def stop(self) -> None:
         if self._log is not None:
-            self._log.warning("Stop")
+            self._log.info("Stop")
 
         if self._coro is not None:
             self._coro.kill()

@@ -1,4 +1,3 @@
-import logging
 from logging import Logger
 from typing import Final, Optional
 from decimal import Decimal
@@ -29,7 +28,7 @@ class ThermalHeadDriver:
             self._clock, int((1 / 24_000_000) * 1_000_000_000), "ns"
         )
 
-        self._log: Final[Optional[Logger]] = logging.getLogger(name) if name else None
+        self._log: Final[Optional[Logger]] = cocotb.log.getChild(name) if name else None
 
         self._clock.value = 1
         self._data.value = 0
@@ -44,7 +43,7 @@ class ThermalHeadDriver:
 
     async def write_bit_stream(self, data: BinaryValue) -> None:
         if self._log is not None:
-            self._log.warning(f"Write data: {data}")
+            self._log.info(f"Write data: {data}")
 
         clock_task: Final[Task] = cocotb.start_soon(self._mech_clock.start())
 
@@ -57,7 +56,7 @@ class ThermalHeadDriver:
 
     async def latch_data(self) -> None:
         if self._log is not None:
-            self._log.warning("Latch data")
+            self._log.info("Latch data")
 
         self._latch.value = 0
         await Timer(Decimal(25), "ns")
@@ -65,7 +64,7 @@ class ThermalHeadDriver:
 
     async def burn(self, time: float) -> None:
         if self._log is not None:
-            self._log.warning(f"Burn for {time}s")
+            self._log.info(f"Burn for {time}s")
 
         self._dst.value = 1
         await Timer(Decimal(time * 1_000_000_000), "ns")
