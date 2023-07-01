@@ -16,11 +16,17 @@ module thermal_head_axi #(
 
     input logic axi_ready,
     output logic axi_valid,
-    output logic [HEAD_WIDTH-1:0] axi_data
+    output logic [HEAD_WIDTH-1:0] axi_data,
+
+    output logic head_active_start_tick,
+    output logic head_active_end_tick
 );
 
-    logic head_active, head_active_sync;
+    logic head_active, head_active_sync, head_active_sync_last;
     logic [HEAD_WIDTH-1:0] head_active_dots;
+
+    logic head_active_start_tick_reg, head_active_start_tick_next;
+    logic head_active_end_tick_reg, head_active_end_tick_next;
 
     logic head_data_sent_reg, head_data_sent_next;
 
@@ -56,10 +62,18 @@ module thermal_head_axi #(
             axi_data_reg  <= '0;
             head_data_sent_reg <= '0;
 
+            head_active_sync_last <= '0;
+            head_active_start_tick_reg <= '0;
+            head_active_end_tick_reg <= '0;
+
         end else begin
             axi_valid_reg <= axi_valid_next;
             axi_data_reg  <= axi_data_next;
             head_data_sent_reg <= head_data_sent_next;
+
+            head_active_sync_last <= head_active_sync;
+            head_active_start_tick_reg <= head_active_start_tick_next;
+            head_active_end_tick_reg <= head_active_end_tick_next;
         end
     end
 
@@ -67,6 +81,8 @@ module thermal_head_axi #(
         axi_valid_next = axi_valid_reg;
         axi_data_next  = axi_data_reg;
         head_data_sent_next = head_data_sent_reg;
+        head_active_start_tick_next = '0;
+        head_active_end_tick_next = '0;
 
         // De-assert valid after transfer complete.
         if (axi_valid && axi_ready) begin
@@ -84,10 +100,21 @@ module thermal_head_axi #(
         if (!head_active_sync) begin
             head_data_sent_next = '0;
         end
+
+        if(head_active_sync && !head_active_sync_last) begin
+            head_active_start_tick_next = 1'b1;
+        end
+
+        if(!head_active_sync && head_active_sync_last) begin
+            head_active_end_tick_next = 1'b1;
+        end
     end
 
     assign axi_valid = axi_valid_reg;
     assign axi_data  = axi_data_reg;
+
+    assign head_active_start_tick = head_active_start_tick_reg;
+    assign head_active_end_tick = head_active_end_tick_reg;
 
 endmodule
 
